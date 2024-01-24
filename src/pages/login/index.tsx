@@ -1,6 +1,8 @@
 import { FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Input } from '../../components/Input'
+import { auth } from '../../services/firebaseConnection'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 export function Login(){
  const [email, setEmail] = useState("");
@@ -9,10 +11,21 @@ export function Login(){
  function handleSubmit(e: FormEvent){
   e.preventDefault();
 
-  console.log({
-    email: email,
-    password: password,
-  })
+ if(email === '' || password === ''){
+  alert("Fill in the blanks")
+  return;
+ }
+
+ signInWithEmailAndPassword(auth, email, password)
+ .then(() => {
+   console.log('successfully logged in')
+     
+ })
+ .catch((error) => {
+  console.log('unable to log in')
+  console.log(error);
+
+ })
 
  }
 
