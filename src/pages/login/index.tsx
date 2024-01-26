@@ -1,14 +1,35 @@
 import { FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Input } from '../../components/Input'
+import { auth } from '../../services/firebaseConnection'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 
 export function Login(){
  const [email, setEmail] = useState("");
  const [password, setPassword] = useState("");
+ const navigate = useNavigate();
 
  function handleSubmit(e: FormEvent){
   e.preventDefault();
+
+  if(email === '' || password === ''){
+    alert('Fiil all the blanks')
+    return;
+  }
+
+  signInWithEmailAndPassword(auth, email, password)
+  .then(() => {
+    console.log("sucessfully logged in");
+    navigate("/admin", {replace: true});
+
+  })
+  .catch((error) => {
+    console.log("error trying to log in");
+    console.log(error);
+
+  })
+  
 
  }
 
